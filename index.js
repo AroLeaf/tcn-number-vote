@@ -20,6 +20,25 @@ function arrayCount(array) {
   return res;
 }
 
+async function updateVotes() {
+  const votes = (await Vote.find()).filter(vote => vote.amount !== null);
+  const DME = await import('discord-markdown-embeds');
+  await Webhook.edit(process.env.WEBHOOK_URL, process.env.MESSAGE_ID, {
+    embeds: DME.render(`
+---
+color: 0x2d3136
+---
+
+# TCN vote
+How many should the recommended minimum member count to join the TCN be?
+
+${Object.entries(arrayCount(votes.map(vote => vote.amount))).map(([k, v]) => `**${k}**: ${v}`).join('\n')}
+
+**Average:** ${Math.round(votes.map(vote => vote.amount).reduce((a, v) => a + v, 0) / votes.length || 0)}
+    `),
+  });
+}
+
 
 fastify.register(ffStatic, {
   root: path.resolve(__dirname, 'public'),
@@ -43,23 +62,16 @@ fastify.post('/submit', async (request, reply) => {
   if (!request.user?.roles.includes('voter') || amount < 0 || amount > 500 || amount % 1) return reply.redirect(rickroll);
 
   await Vote.updateOne({ user: request.user.id }, { amount }, { upsert: true });
+  await updateVotes();
 
-  const votes = await Vote.find();
-  const DME = await import('discord-markdown-embeds');
-  await Webhook.edit(process.env.WEBHOOK_URL, process.env.MESSAGE_ID, {
-    embeds: DME.render(`
----
-color: 0x2d3136
----
+  return reply.sendFile('submitted.html');
+});
 
-# TCN vote
-How many should the recommended minimum member count to join the TCN be?
-
-${Object.entries(arrayCount(votes.map(vote => vote.amount))).map(([k, v]) => `**${k}**: ${v}`).join('\n')}
-
-**Average:** ${Math.round(votes.map(vote => vote.amount).reduce((a, v) => a + v) / votes.length)}
-    `),
-  });
+fastify.get('/abstain', async (request, reply) => {
+  if (!request.user?.roles.includes('voter')) return reply.redirect(rickroll);
+  
+  await Vote.updateOne({ user: request.user.id }, { amount: null }, { upsert: true });
+  await updateVotes();
 
   return reply.sendFile('submitted.html');
 });

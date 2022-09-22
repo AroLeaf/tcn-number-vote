@@ -77,6 +77,11 @@ input, textarea {
   width: 100%;
 }
 
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
 button {
   width: fit-content;
   background-color: var(--col-main);
