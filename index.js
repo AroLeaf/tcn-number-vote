@@ -32,7 +32,7 @@ color: 0x2d3136
 # TCN vote
 How many should the recommended minimum member count to join the TCN be?
 
-${Object.entries(arrayCount(votes.map(vote => vote.amount))).map(([k, v]) => `**${k}**: ${v}`).join('\n')}
+${Object.entries(arrayCount(votes.map(vote => vote.amount))).map(([k, v]) => `**${k}**: ${v}`).join('\\\n')}
 
 **Average:** ${Math.round(votes.map(vote => vote.amount).reduce((a, v) => a + v, 0) / votes.length || 0)}
     `),
