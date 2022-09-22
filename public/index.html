@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>TCN Voting</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d649462fb3.js" crossorigin="anonymous"></script>
+    <link rel='icon' type='image/png' href='logo.png'>
+  </head>
+
+  <body>
+    <main>
+      <header>
+        <img src="logo.png">
+        <h1>TCN Voting Form</h1>
+      </header>
+      <form action="submit" method="post">
+        
+        <label>
+          <h3>How many should the recommended minimum member count to join the TCN be?</h3>
+          <input type="number" name="members" placeholder="0-500" min="0" max="500">
+        </label>
+
+        <button type="submit">Submit</button>
+
+      </form>
+    </main>
+  </body>
+</html>
