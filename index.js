@@ -62,7 +62,7 @@ fastify.post('/submit', async (request, reply) => {
   if (!request.user?.roles.includes('voter') || amount < 0 || amount > 500 || amount % 1) return reply.redirect(rickroll);
 
   await Vote.updateOne({ user: request.user.id }, { amount }, { upsert: true });
-  await updateVotes();
+  //await updateVotes();
 
   return reply.sendFile('submitted.html');
 });
@@ -71,7 +71,7 @@ fastify.get('/abstain', async (request, reply) => {
   if (!request.user?.roles.includes('voter')) return reply.redirect(rickroll);
   
   await Vote.updateOne({ user: request.user.id }, { amount: null }, { upsert: true });
-  await updateVotes();
+  //await updateVotes();
 
   return reply.sendFile('submitted.html');
 });
