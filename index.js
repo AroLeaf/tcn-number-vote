@@ -40,7 +40,7 @@ fastify.get('/', async (request, reply) => {
 
 fastify.post('/submit', async (request, reply) => {
   const amount = +request.body.members;
-  if (!request.user?.roles.includes('voter') || amount < 0 || amount > 500) return reply.redirect(rickroll);
+  if (!request.user?.roles.includes('voter') || amount < 0 || amount > 500 || amount % 1) return reply.redirect(rickroll);
 
   await Vote.updateOne({ user: request.user.id }, { amount }, { upsert: true });
 
